@@ -4,7 +4,7 @@
      * Objetivo: Arquivo de rota, para segmentar as ações encaminhadas pela Wiew
      *     (Dados de um form, listagem de dados, ação de excluir ou atualizar).
      *      Esse arquivo será responsável por encaminhar as solicitações para a Controller.
-     * Autora: Florbela
+     * Autora: Leila
      * Data: 04/03/2022
      * Versão: 1.0
      **************************************************************************************/
@@ -27,10 +27,25 @@
 
                 //Verificando o que foi passado para o action
                 if($action == 'INSERIR')
+                {
                     //Enviando o objeto POST para a função inserirContato
-                    inserirContato($_POST);
-                    
-                break;
+                    // Chama a função de inserir na controller
+                    // validar tipo de dados que a controller retorna
+
+                    $resposta = inserirContato($_POST);
+                    if (is_bool($resposta))
+                    {
+                        // verifica se o retorno é true
+                        if($resposta)
+                            echo('<script> alert("Registro Inserido com Sucesso!"); window.location.href="index.php"; </script>');
+                            // o comando window.location nos permite definir para qual janela retornar
+                    }
+                    // verifica se é array, indicando que houve erro no processo de inserção
+                    elseif (is_array($resposta))
+                        echo('<script> alert("'.$resposta["message"].'");  </script>');
+                }
+
+            break;
         }
 
     }

@@ -1,7 +1,7 @@
 <?php
     /**********************************************************************
      * Objetivo: Arquivo para criar a conexão com o banco de dados Mysql.
-     * Autora: Florbela
+     * Autora: Leila
      * Data: 25/02/2022
      * Versão: 1.0
      **********************************************************************/
