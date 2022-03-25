@@ -1,30 +1,38 @@
 <?php
-    /**********************************************************************
-     * Objetivo: Arquivo para criar a conexão com o banco de dados Mysql.
-     * Autora: Leila
-     * Data: 25/02/2022
-     * Versão: 1.0
-     **********************************************************************/
 
-    //Constantes para estabeleecer a conexão com o banco de dados (local do BD, usuário, senha e database)
-    const SERVER = 'localhost';
-    const USER = 'root';
-    const PASSWORD = 'bcd127';
-    const DATABASE = 'dbcontatos';
+/**********************************************************************
+ * Objetivo: Arquivo para criar a conexão com o banco de dados Mysql.
+ * Autora: Leila
+ * Data: 25/02/2022
+ * Versão: 1.3
+ **********************************************************************/
 
-    //Abre a conexão com o banco de dados Mysql
-    function conexaoMysql() {
-        $conexao = array();
+//Constantes para estabeleecer a conexão com o banco de dados (local do BD, usuário, senha e database)
+const SERVER = 'localhost';
+const USER = 'root';
+const PASSWORD = 'bcd127';
+const DATABASE = 'dbcontatos';
 
-        //Se a conexão for estabelecida com o BD, iremos ter um array de dados sobre a conexão
-        $conexao = mysqli_connect(SERVER, USER, PASSWORD, DATABASE);
+//Abre a conexão com o banco de dados Mysql
+function conexaoMysql()
+{
+    $conexao = array();
 
-        //Validação para verificar se a conexão foi realizada com sucesso
-        if($conexao)
-            return $conexao;
-        else
-            return false;
-    }
+    //Se a conexão for estabelecida com o BD, iremos ter um array de dados sobre a conexão
+    $conexao = mysqli_connect(SERVER, USER, PASSWORD, DATABASE);
+
+    //Validação para verificar se a conexão foi realizada com sucesso
+    if ($conexao)
+        return $conexao;
+    else
+        return false;
+}
+
+// fecha a conexão com o banco de dados mysql
+function fecharConexaoMysql($conexao)
+{
+    mysqli_close($conexao);
+}
 
     /*
         Existem 3 formas de criar a conexão com o BD Mysql:
@@ -36,4 +44,3 @@
             (Indicada pela segurança e POO)
         OBS:. Específico para PHP
     */
-?>
