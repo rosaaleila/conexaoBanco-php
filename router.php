@@ -46,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'GET')
                 // url no link da imagem do excluir que foi acionado na index
                 $idContato = $_GET['id'];
 
+                // chama a função da controller
                 $resposta = excluirContato($idContato);
 
                 if (is_bool($resposta)) {
@@ -55,6 +56,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'GET')
                 } elseif (is_array($resposta)) {
                     echo('<script> alert("' . $resposta["message"] . '");  </script>');
                 }
+            } elseif ($action == 'BUSCAR') {
+
+                // recebe o id do registro que deverá ser editado, que foi enviado pela
+                // url no link da imagem do editado que foi acionado na index
+                $idContato = $_GET['id'];
+
+                // chama a função da controller
+                $dados = buscarContato($idContato);
+
+                // ativa a utilizacao de variaveis de sessao no servidor
+                session_start();
+
+                // guarda em variavel de sessao os dados que o BD retornou para a busca do id
+                    // obs.: essa variavel de sessao sera utilizada na index.php, para colocar
+                    // os dados do contato nas caixas de texto 
+                $_SESSION['dadosContato'] = $dados;
+
+                require_once('index.php');
+
+                // o comando header abre uma nova instancia da página requisitada, porem
+                // havera uma acao de carregamento no navegador (piscando a tela novamente)
+                // com o require, apenas importamos a tela da index. assim, não ha novo carregamento
+
             }
 
             break;

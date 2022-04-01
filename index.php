@@ -1,3 +1,28 @@
+<?php
+
+$nome = null;
+$email = null;
+$celular = null;
+$telefone = null;
+$obs = null;
+
+// valida se a utilizacao de variaveis de sessao esta ativa no servidor
+if (session_status())
+    // valida se a variavel de sessao dadoscontato nao esta vazia
+    if (!empty($_SESSION['dadosContato'])) {
+
+        $id = $_SESSION['dadosContato']['id'];
+        $nome = $_SESSION['dadosContato']['nome'];
+        $email = $_SESSION['dadosContato']['email'];
+        $celular = $_SESSION['dadosContato']['celular'];
+        $telefone = $_SESSION['dadosContato']['telefone'];
+        $obs = $_SESSION['dadosContato']['obs'];
+    
+    }
+
+
+?>
+
 <!DOCTYPE>
 <html lang="pt-br">
 
@@ -5,7 +30,7 @@
     <meta charset="UTF-8">
     <title> Cadastro </title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
-
+    <script src="./js/main.js" defer></script>
 </head>
 
 <body>
@@ -22,7 +47,7 @@
                         <label> Nome: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <input type="text" name="txtNome" value="" placeholder="Digite seu Nome" maxlength="100">
+                        <input type="text" name="txtNome" value="<?=$nome?>" placeholder="Digite seu Nome" maxlength="100">
                     </div>
                 </div>
 
@@ -31,7 +56,7 @@
                         <label> Telefone: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <input type="tel" name="txtTelefone" value="">
+                        <input type="tel" name="txtTelefone" value="<?=$telefone?>">
                     </div>
                 </div>
                 <div class="campos">
@@ -39,7 +64,7 @@
                         <label> Celular: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <input type="tel" name="txtCelular" value="">
+                        <input type="tel" name="txtCelular" value="<?=$celular?>">
                     </div>
                 </div>
 
@@ -49,7 +74,7 @@
                         <label> Email: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <input type="email" name="txtEmail" value="">
+                        <input type="email" name="txtEmail" value="<?=$email?>">
                     </div>
                 </div>
                 <div class="campos">
@@ -57,7 +82,7 @@
                         <label> Observações: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <textarea name="txtObs" cols="50" rows="7"></textarea>
+                        <textarea name="txtObs" cols="50" rows="7"><?=$obs?></textarea>
                     </div>
                 </div>
                 <div class="enviar">
@@ -99,8 +124,10 @@
                     <td class="tblColunas registros"><?= $item['email'] ?></td>
 
                     <td class="tblColunas registros">
-                    <img src="img/edit.png" alt="Editar" title="Editar" class="editar">
-                        <a href="router.php?component=contatos&action=deletar&id=<?=$item['id']?>">
+                        <a href="router.php?component=contatos&action=buscar&id=<?= $item['id'] ?>">
+                            <img src="img/edit.png" alt="Editar" title="Editar" class="editar">
+                        </a>
+                        <a onclick="return window.confirm('Deseja realmente excluir este contato?')" href="router.php?component=contatos&action=deletar&id=<?= $item['id'] ?>">
                             <img src="img/trash.png" alt="Excluir" title="Excluir" class="excluir">
                         </a>
                         <img src="img/search.png" alt="Visualizar" title="Visualizar" class="pesquisar">

@@ -78,7 +78,7 @@ function deleteContato($id)
 }
 
 //Função para listar todos os contatos do BD
-function selectALllContatos()
+function selectAllContatos()
 {
 
     // abre a conexao com o BD
@@ -120,4 +120,43 @@ function selectALllContatos()
     // quando enviamos pro bd um script do tipo insert, update e o delete, ele apenas retorna se ocorreu tudo certo
     // scripts como select esperam o retorno do bd
 
+}
+
+// função para buscar um contato no BD através do id do registros
+function selectByIdContato($id)
+{
+
+    // abre a conexao com o BD
+    $conexao = conexaoMysql();
+
+    // script para listar todos os dados do BD ** em ordem decrescente (do mais novo ao mais velho)
+    $sql = "select * from tblcontatos where idcontato = ".$id;
+    // desc - descendente | asc - ascendente
+
+    // executa o script sql no BD e guarda o retorno dos dados (se houver)
+    $result = mysqli_query($conexao, $sql);
+
+    // valida se o BD retornou registros 
+    if ($result) {
+
+        // mysqil_fetch_assoc() - permite converter os dados do BD em um array para manipulacao no PHP
+        if ($rsDados = mysqli_fetch_assoc($result)) // se houverem dados...
+        {
+            // cria um array com os dados do BD
+            $arrayDados = array(
+                "id"        =>  $rsDados['idcontato'],
+                "nome"      =>  $rsDados['nome'],
+                "telefone"  =>  $rsDados['telefone'],
+                "celular"   =>  $rsDados['celular'],
+                "email"     =>  $rsDados['email'],
+                "obs"       =>  $rsDados['obs']
+            );
+            
+        }
+
+        // solicita o fechamento da conexao com o BD
+        fecharConexaoMysql($conexao);
+
+        return $arrayDados;
+    }
 }
