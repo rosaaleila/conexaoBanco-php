@@ -51,10 +51,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'GET')
 
                 if (is_bool($resposta)) {
                     if ($resposta) {
-                        echo('<script> alert("Registro Deletado com Sucesso!"); window.location.href="index.php"; </script>');
+                        echo ('<script> alert("Registro Deletado com Sucesso!"); window.location.href="index.php"; </script>');
                     }
                 } elseif (is_array($resposta)) {
-                    echo('<script> alert("' . $resposta["message"] . '");  </script>');
+                    echo ('<script> alert("' . $resposta["message"] . '");  </script>');
                 }
             } elseif ($action == 'BUSCAR') {
 
@@ -69,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'GET')
                 session_start();
 
                 // guarda em variavel de sessao os dados que o BD retornou para a busca do id
-                    // obs.: essa variavel de sessao sera utilizada na index.php, para colocar
-                    // os dados do contato nas caixas de texto 
+                // obs.: essa variavel de sessao sera utilizada na index.php, para colocar
+                // os dados do contato nas caixas de texto 
                 $_SESSION['dadosContato'] = $dados;
 
                 require_once('index.php');
@@ -79,6 +79,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'GET')
                 // havera uma acao de carregamento no navegador (piscando a tela novamente)
                 // com o require, apenas importamos a tela da index. assim, não ha novo carregamento
 
+            } elseif ($action == 'EDITAR') {
+
+                // recebe o id que foi encaminhado no action do form pela url
+                $idContato = $_GET['id'];
+
+                // Chama a função de editar na controller
+                $resposta = atualizarContato($_POST, $idContato);
+
+                if (is_bool($resposta)) {
+                    // verifica se o retorno é true
+                    if ($resposta)
+                        echo ('<script> alert("Registro Atualizado com Sucesso!"); window.location.href="index.php"; </script>');
+                    // o comando window.location nos permite definir para qual janela retornar
+                } elseif (is_array($resposta)) // verifica se é array, indicando que houve erro no processo de edição
+                    echo ('<script> alert("' . $resposta["message"] . '"); window.history.back(); </script>');
             }
 
             break;

@@ -5,7 +5,7 @@
  *      (insert, update, select e delete).
  * Autora: Leila
  * Data: 11/03/2022
- * Versão: 1.3
+ * Versão: 1.4
  ***********************************************************************/
 
 //Import do arquivo que estabelece a conexão com o BD
@@ -49,8 +49,35 @@ function insertContato($dadosContato)
 }
 
 //Função para realizar o update no BD
-function updateContato()
+function updateContato($dadosContato)
 {
+
+    // declaracao da variavel que armazena o status de erro e é utilizada no return  
+    $status = (bool) false;
+
+    //Abre a conexão com o banco de dados
+    $conexao = conexaoMysql();
+
+    //Monta o script para enviar para o BD
+    $sql = "update tblcontatos set
+                    nome = '" . $dadosContato['nome'] . "', 
+                    telefone = '" . $dadosContato['telefone'] . "', 
+                    celular = '" . $dadosContato['celular'] . "', 
+                    email = '" . $dadosContato['email'] . "', 
+                    obs = '" . $dadosContato['obs'] . "'
+                    where idcontato =" . $dadosContato['id'];
+
+    //Executa um script no BD -> Dentro dos (quem é o BD, o que vc quer que eu mande para o BD)
+    // validação para verificar se o script sql está correto
+    if (mysqli_query($conexao, $sql)) {
+        // validacao para verificar se uma linha foi acrescentada no BD
+        if (mysqli_affected_rows($conexao))
+            $status = true;
+    }
+
+    // fecha a conexao com o BD
+    fecharConexaoMysql($conexao);
+    return $status;
 }
 //Função para excluir no BD
 function deleteContato($id)
@@ -130,7 +157,7 @@ function selectByIdContato($id)
     $conexao = conexaoMysql();
 
     // script para listar todos os dados do BD ** em ordem decrescente (do mais novo ao mais velho)
-    $sql = "select * from tblcontatos where idcontato = ".$id;
+    $sql = "select * from tblcontatos where idcontato = " . $id;
     // desc - descendente | asc - ascendente
 
     // executa o script sql no BD e guarda o retorno dos dados (se houver)
@@ -151,7 +178,6 @@ function selectByIdContato($id)
                 "email"     =>  $rsDados['email'],
                 "obs"       =>  $rsDados['obs']
             );
-            
         }
 
         // solicita o fechamento da conexao com o BD

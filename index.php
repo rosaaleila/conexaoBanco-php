@@ -1,10 +1,28 @@
 <?php
 
+/* 
+solucoes para variavel indefinida ao abrir o navegador.
+
+uma alternativa é adicionar um @ antes do nome da
+variavel (nada recomendado). 
+    o @ omite a mensagem de erro no navegador.
+
+uma outra alternativa é utilizar um if ternario dentro do
+html (está sendo utilizada)
+
+outra alternativa:
+
 $nome = null;
 $email = null;
 $celular = null;
 $telefone = null;
-$obs = null;
+$obs = null; 
+*/
+
+// variavel criada para diferenciar no action do formulário qual acao
+// deveria ser levada para a router (inserir ou editar)
+// nas condicoes abaixo, mudamos o action dessa variavel para a ação de editar
+$form = (string) "router.php?component=contatos&action=inserir";
 
 // valida se a utilizacao de variaveis de sessao esta ativa no servidor
 if (session_status())
@@ -17,7 +35,12 @@ if (session_status())
         $celular = $_SESSION['dadosContato']['celular'];
         $telefone = $_SESSION['dadosContato']['telefone'];
         $obs = $_SESSION['dadosContato']['obs'];
-    
+
+        // mudamos a action para editar o registro no botao salvar
+        $form = "router.php?component=contatos&action=editar&id=" . $id;
+
+        // destroi a variavel apagando-a da memoria
+        unset($_SESSION['$dadosContato']);
     }
 
 
@@ -41,13 +64,13 @@ if (session_status())
 
         </div>
         <div id="cadastroInformacoes">
-            <form action="router.php?component=contatos&action=inserir" name="frmCadastro" method="post">
+            <form action="<?= $form ?>" name="frmCadastro" method="post">
                 <div class="campos">
                     <div class="cadastroInformacoesPessoais">
                         <label> Nome: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <input type="text" name="txtNome" value="<?=$nome?>" placeholder="Digite seu Nome" maxlength="100">
+                        <input type="text" name="txtNome" value="<?= isset($nome) ? $nome : null ?>" placeholder="Digite seu Nome" maxlength="100">
                     </div>
                 </div>
 
@@ -56,7 +79,7 @@ if (session_status())
                         <label> Telefone: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <input type="tel" name="txtTelefone" value="<?=$telefone?>">
+                        <input type="tel" name="txtTelefone" value="<?= isset($telefone) ? $telefone : null ?>">
                     </div>
                 </div>
                 <div class="campos">
@@ -64,7 +87,7 @@ if (session_status())
                         <label> Celular: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <input type="tel" name="txtCelular" value="<?=$celular?>">
+                        <input type="tel" name="txtCelular" value="<?= isset($celular) ? $celular : null ?>">
                     </div>
                 </div>
 
@@ -74,7 +97,7 @@ if (session_status())
                         <label> Email: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <input type="email" name="txtEmail" value="<?=$email?>">
+                        <input type="email" name="txtEmail" value="<?= isset($email) ? $email : null ?>">
                     </div>
                 </div>
                 <div class="campos">
@@ -82,7 +105,7 @@ if (session_status())
                         <label> Observações: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <textarea name="txtObs" cols="50" rows="7"><?=$obs?></textarea>
+                        <textarea name="txtObs" cols="50" rows="7"><?= isset($obs) ? $obs : null ?></textarea>
                     </div>
                 </div>
                 <div class="enviar">
@@ -127,6 +150,7 @@ if (session_status())
                         <a href="router.php?component=contatos&action=buscar&id=<?= $item['id'] ?>">
                             <img src="img/edit.png" alt="Editar" title="Editar" class="editar">
                         </a>
+                        <!-- criando janela de confirmacao antes de excluir um contato -->
                         <a onclick="return window.confirm('Deseja realmente excluir este contato?')" href="router.php?component=contatos&action=deletar&id=<?= $item['id'] ?>">
                             <img src="img/trash.png" alt="Excluir" title="Excluir" class="excluir">
                         </a>
