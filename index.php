@@ -64,7 +64,11 @@ if (session_status())
 
         </div>
         <div id="cadastroInformacoes">
-            <form action="<?= $form ?>" name="frmCadastro" method="post">
+            <!--
+                enctype="multipart/form-data" - esta opção é obrigatória
+                para enviar arquivos do form em html para o servidor
+            -->
+            <form action="<?= $form ?>" name="frmCadastro" method="post" enctype="multipart/form-data">
                 <div class="campos">
                     <div class="cadastroInformacoesPessoais">
                         <label> Nome: </label>
@@ -98,6 +102,14 @@ if (session_status())
                     </div>
                     <div class="cadastroEntradaDeDados">
                         <input type="email" name="txtEmail" value="<?= isset($email) ? $email : null ?>">
+                    </div>
+                </div>
+                <div class="campos">
+                    <div class="cadastroInformacoesPessoais">
+                        <label> Escolha um arquivo: </label>
+                    </div>
+                    <div class="cadastroEntradaDeDados">
+                        <input type="file" name="fleFoto" accept=".jpg, .png, .jpeg, .gif"> <!-- seleção de arquivo -->
                     </div>
                 </div>
                 <div class="campos">

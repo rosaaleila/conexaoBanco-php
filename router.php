@@ -6,7 +6,7 @@
  *      Esse arquivo será responsável por encaminhar as solicitações para a Controller.
  * Autora: Leila
  * Data: 04/03/2022
- * Versão: 1.0
+ * Versão: 1.4
  **************************************************************************************/
 
 $action = (string) null;
@@ -31,7 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'GET')
                 // Chama a função de inserir na controller
                 // validar tipo de dados que a controller retorna
 
-                $resposta = inserirContato($_POST);
+                if(isset($_FILES) && !empty($_FILES)) {
+                    $resposta = inserirContato($_POST, $_FILES);
+                } else {
+                    $resposta = inserirContato($_POST, null);
+                }
+
                 if (is_bool($resposta)) {
                     // verifica se o retorno é true
                     if ($resposta)
