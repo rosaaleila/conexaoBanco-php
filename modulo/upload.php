@@ -17,7 +17,7 @@
     $arquivo = $arrayFile;
     $sizeFile = (int) 0;
     $typeFile = (string) null;
-    $namefile = (string) null; 
+    $nameFile = (string) null; 
     $tempFile = (string) null;
 
     // validacao para identificar se existe um arquivo valido

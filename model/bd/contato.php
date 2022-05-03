@@ -27,13 +27,14 @@ function insertContato($dadosContato)
                     telefone, 
                     celular, 
                     email, 
-                    obs)
+                    obs, foto)
                 values
                     ('" . $dadosContato['nome'] . "', 
                     '" . $dadosContato['telefone'] . "', 
                     '" . $dadosContato['celular'] . "',
                     '" . $dadosContato['email'] . "', 
-                    '" . $dadosContato['obs'] . "');";
+                    '" . $dadosContato['obs'] . "',
+                    '" . $dadosContato['foto'] . "')"; 
 
     //Executa um script no BD -> Dentro dos (quem é o BD, o que vc quer que eu mande para o BD)
     // validação para verificar se o script sql está correto
@@ -64,6 +65,7 @@ function updateContato($dadosContato)
                     telefone = '" . $dadosContato['telefone'] . "', 
                     celular = '" . $dadosContato['celular'] . "', 
                     email = '" . $dadosContato['email'] . "', 
+                    foto = '" . $dadosContato['foto'] . "', 
                     obs = '" . $dadosContato['obs'] . "'
                     where idcontato =" . $dadosContato['id'];
 
@@ -133,6 +135,7 @@ function selectAllContatos()
                 "telefone"  =>  $rsDados['telefone'],
                 "celular"   =>  $rsDados['celular'],
                 "email"     =>  $rsDados['email'],
+                "foto"      =>  $rsDados['foto'],
                 "obs"       =>  $rsDados['obs']
             );
             $cont++;
@@ -176,6 +179,7 @@ function selectByIdContato($id)
                 "telefone"  =>  $rsDados['telefone'],
                 "celular"   =>  $rsDados['celular'],
                 "email"     =>  $rsDados['email'],
+                "foto"      =>  $rsDados['foto'],
                 "obs"       =>  $rsDados['obs']
             );
         }

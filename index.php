@@ -1,5 +1,8 @@
 <?php
 
+// import do arquivo de configuracoes
+require_once('modulo/config.php');
+
 /* 
 solucoes para variavel indefinida ao abrir o navegador.
 
@@ -24,6 +27,9 @@ $obs = null;
 // nas condicoes abaixo, mudamos o action dessa variavel para a ação de editar
 $form = (string) "router.php?component=contatos&action=inserir";
 
+// variavel para carregar o nome da foto do BD
+$foto = (string) null;
+
 // valida se a utilizacao de variaveis de sessao esta ativa no servidor
 if (session_status())
     // valida se a variavel de sessao dadoscontato nao esta vazia
@@ -34,10 +40,11 @@ if (session_status())
         $email = $_SESSION['dadosContato']['email'];
         $celular = $_SESSION['dadosContato']['celular'];
         $telefone = $_SESSION['dadosContato']['telefone'];
+        $foto = $_SESSION['dadosContato']['foto'];
         $obs = $_SESSION['dadosContato']['obs'];
 
         // mudamos a action para editar o registro no botao salvar
-        $form = "router.php?component=contatos&action=editar&id=" . $id;
+        $form = "router.php?component=contatos&action=editar&id=" . $id."&foto=".$foto;
 
         // destroi a variavel apagando-a da memoria
         unset($_SESSION['$dadosContato']);
@@ -109,7 +116,8 @@ if (session_status())
                         <label> Escolha um arquivo: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <input type="file" name="fleFoto" accept=".jpg, .png, .jpeg, .gif"> <!-- seleção de arquivo -->
+                        <input type="file" name="fleFoto" accept=".jpg, .png, .jpeg, .gif">
+                         <!-- seleção de arquivo -->
                     </div>
                 </div>
                 <div class="campos">
@@ -120,6 +128,11 @@ if (session_status())
                         <textarea name="txtObs" cols="50" rows="7"><?= isset($obs) ? $obs : null ?></textarea>
                     </div>
                 </div>
+
+                <div class="campos">
+                    <img src="<?= DIRETORIO_FILE_UPLOAD.$foto ?>">
+                </div>
+
                 <div class="enviar">
                     <div class="enviar">
                         <input type="submit" name="btnEnviar" value="Salvar">
@@ -139,6 +152,7 @@ if (session_status())
                 <td class="tblColunas destaque"> Nome </td>
                 <td class="tblColunas destaque"> Celular </td>
                 <td class="tblColunas destaque"> Email </td>
+                <td class="tblColunas destaque"> Imagem </td>
                 <td class="tblColunas destaque"> Opções </td>
             </tr>
 
@@ -150,20 +164,25 @@ if (session_status())
             $listContato = listarContato();
 
             // estrutura de repeticao para retornar os dados do array e imprimir na tela
-            foreach ($listContato as $item) {
+            foreach ($listContato as $item)
+            {
+                // variavel para carregar a foto do bd
+                $foto = $item['foto'];
+            
             ?>
 
                 <tr id="tblLinhas">
                     <td class="tblColunas registros"><?= $item['nome'] ?></td>
                     <td class="tblColunas registros"><?= $item['celular'] ?></td>
                     <td class="tblColunas registros"><?= $item['email'] ?></td>
+                    <td class="tblColunas registros"><img src="<?= DIRETORIO_FILE_UPLOAD.$foto ?>" alt="Imagem escolhida"></td>
 
                     <td class="tblColunas registros">
                         <a href="router.php?component=contatos&action=buscar&id=<?= $item['id'] ?>">
                             <img src="img/edit.png" alt="Editar" title="Editar" class="editar">
                         </a>
                         <!-- criando janela de confirmacao antes de excluir um contato -->
-                        <a onclick="return window.confirm('Deseja realmente excluir este contato?')" href="router.php?component=contatos&action=deletar&id=<?= $item['id'] ?>">
+                        <a onclick="return window.confirm('Deseja realmente excluir este contato?')" href="router.php?component=contatos&action=deletar&id=<?= $item['id'] ?>&foto=<?= $foto ?>">
                             <img src="img/trash.png" alt="Excluir" title="Excluir" class="excluir">
                         </a>
                         <img src="img/search.png" alt="Visualizar" title="Visualizar" class="pesquisar">
