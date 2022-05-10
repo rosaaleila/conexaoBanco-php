@@ -27,14 +27,18 @@ function insertContato($dadosContato)
                     telefone, 
                     celular, 
                     email, 
-                    obs, foto)
+                    obs,
+                    foto,
+                    idestado)
                 values
                     ('" . $dadosContato['nome'] . "', 
                     '" . $dadosContato['telefone'] . "', 
                     '" . $dadosContato['celular'] . "',
                     '" . $dadosContato['email'] . "', 
                     '" . $dadosContato['obs'] . "',
-                    '" . $dadosContato['foto'] . "')"; 
+                    '" . $dadosContato['foto'] . "',
+                    '" . $dadosContato['idestado'] . "'
+                    )";
 
     //Executa um script no BD -> Dentro dos (quem é o BD, o que vc quer que eu mande para o BD)
     // validação para verificar se o script sql está correto
@@ -66,7 +70,8 @@ function updateContato($dadosContato)
                     celular = '" . $dadosContato['celular'] . "', 
                     email = '" . $dadosContato['email'] . "', 
                     foto = '" . $dadosContato['foto'] . "', 
-                    obs = '" . $dadosContato['obs'] . "'
+                    obs = '" . $dadosContato['obs'] . "',
+                    idestado = '" . $dadosContato['idestado'] . "'
                     where idcontato =" . $dadosContato['id'];
 
     //Executa um script no BD -> Dentro dos (quem é o BD, o que vc quer que eu mande para o BD)
@@ -136,6 +141,7 @@ function selectAllContatos()
                 "celular"   =>  $rsDados['celular'],
                 "email"     =>  $rsDados['email'],
                 "foto"      =>  $rsDados['foto'],
+                "idestado"  =>  $rsDados['idestado'],
                 "obs"       =>  $rsDados['obs']
             );
             $cont++;
@@ -144,7 +150,10 @@ function selectAllContatos()
         // solicita o fechamento da conexao com o BD
         fecharConexaoMysql($conexao);
 
-        return $arrayDados;
+        if (isset($arrayDados))
+            return $arrayDados;
+        else
+            return false;
     }
 
     // quando enviamos pro bd um script do tipo insert, update e o delete, ele apenas retorna se ocorreu tudo certo
@@ -180,6 +189,7 @@ function selectByIdContato($id)
                 "celular"   =>  $rsDados['celular'],
                 "email"     =>  $rsDados['email'],
                 "foto"      =>  $rsDados['foto'],
+                "idestado"  =>  $rsDados['idestado'],
                 "obs"       =>  $rsDados['obs']
             );
         }
