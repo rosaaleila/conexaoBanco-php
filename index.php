@@ -199,7 +199,7 @@ if (session_status())
                 foreach ($listContato as $item) {
                     // variavel para carregar a foto do bd
                     $foto = $item['foto'];
-                    $estado = selectByIdEstado($item['idestado']);
+                    $estado = buscarEstado($item['idestado']);
 
             ?>
 

@@ -27,3 +27,28 @@ function listarEstado()
     else
         return false;
 }
+
+function buscarEstado($id)
+{
+
+    // if para verificar se o id é diferente de 0, se não está vazio e se é um número
+    if ($id != 0 && !empty($id) && is_numeric($id)) {
+
+        //import do arquivo de contato
+        require_once('model/bd/estado.php');
+
+        // chama a funcao que vai buscar os dados no BD
+        $dados = selectByIdEstado($id);
+
+        // valida se existem dados para serem devolvidos
+        if (!empty($dados))
+            return $dados;
+        else
+            return false;
+    } else {
+        return array(
+            'idErro'   => 4,
+            'message'   => 'Não é possível buscar um registro sem informar um ID válido.'
+        );
+    }
+}
