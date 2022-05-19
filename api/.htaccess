@@ -1,0 +1,14 @@
+##Ativação das permissões do servidor Apache nas requisições da API
+
+<IfModule mod_rewrite.c>
+    Header set Access-Control-Allow-Origin: "*"   
+    Header set Access-Control-Allow-Methods: "GET, POST, PUT, DELETE, OPTIONS"   
+    Header set Access-Control-Allow-Headers: "X-Requested-Width, Content-Type"   
+</IfModule>
+
+RewriteEngine On 
+Options All -Indexes
+
+DirectoryIndex index.php 
+RewriteCond %{REQUEST_FILENAME} !-f 
+RewriteRule ^(.*) index.php?url=$1 [QSA,L]
