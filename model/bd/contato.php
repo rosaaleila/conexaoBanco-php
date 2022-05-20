@@ -192,11 +192,14 @@ function selectByIdContato($id)
                 "idestado"  =>  $rsDados['idestado'],
                 "obs"       =>  $rsDados['obs']
             );
+            
+            return $arrayDados;
+        } else {
+            return false;
         }
 
         // solicita o fechamento da conexao com o BD
         fecharConexaoMysql($conexao);
 
-        return $arrayDados;
     }
 }

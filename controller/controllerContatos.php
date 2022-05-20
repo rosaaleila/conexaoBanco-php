@@ -8,7 +8,7 @@
  * Versão: 1.7
  ***********************************************************************/
 
-require_once('modulo/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/leila/conexaoBancoPhp/modulo/config.php');
 
 //Função para receber dados da Wiew e encaminhar para a Model (inserir)
 function inserirContato($dadosContato, $file)
@@ -25,7 +25,7 @@ function inserirContato($dadosContato, $file)
             if ($file['fleFoto']['name'] != null) {
 
                 //import da funcao uploadfile
-                require_once('modulo/upload.php');
+                require_once(SRC . 'modulo/upload.php');
 
                 // chama a funcao de upload
                 $nomeFoto = uploadFile($file['fleFoto']);
@@ -49,7 +49,7 @@ function inserirContato($dadosContato, $file)
             );
 
             //Import do arquivo contato para manipular o bd
-            require_once('model/bd/contato.php');
+            require_once(SRC . 'model/bd/contato.php');
             //Chamando a função insertContato (essa função está na model)
             if (insertContato($arrayDados))
                 return true;
@@ -151,8 +151,8 @@ function excluirContato($dadosContato)
     if ($id != 0 && !empty($id) && is_numeric($id)) {
 
         //import do arquivo de contato
-        require_once('model/bd/contato.php');
-        require_once('modulo/config.php');
+        require_once(SRC . 'model/bd/contato.php');
+        require_once(SRC . 'modulo/config.php');
 
         // chama a função da model e valida se o retorno foi true ou false
         if (deleteContato($id)) {
@@ -182,7 +182,7 @@ function excluirContato($dadosContato)
 function listarContato()
 {
     // import do arquivo que vai buscar os dados
-    require_once('model/bd/contato.php');
+    require_once(SRC .'model/bd/contato.php');
 
     // chama a funcao que vai buscar os dados no BD
     $dados = selectAllContatos();
@@ -202,13 +202,13 @@ function buscarContato($id)
     if ($id != 0 && !empty($id) && is_numeric($id)) {
 
         //import do arquivo de contato
-        require_once('model/bd/contato.php');
+        require_once(SRC . 'model/bd/contato.php');
 
         // chama a funcao que vai buscar os dados no BD
         $dados = selectByIdContato($id);
 
         // valida se existem dados para serem devolvidos
-        if (!empty($dados))
+        if (!empty($dados) && !is_bool($dados))
             return $dados;
         else
             return false;
