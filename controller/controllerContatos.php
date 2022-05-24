@@ -8,7 +8,14 @@
  * Versão: 1.7
  ***********************************************************************/
 
-require_once($_SERVER['DOCUMENT_ROOT'] . '/leila/conexaoBancoPhp/modulo/config.php');
+$consumoAPI = false;
+
+ if(strpos(getcwd(), 'api')) {
+    require_once(SRC . '/modulo/config.php');
+    $consumoAPI = true;
+ } else {
+    require_once('./modulo/config.php');
+ }
 
 //Função para receber dados da Wiew e encaminhar para a Model (inserir)
 function inserirContato($dadosContato, $file)
@@ -152,7 +159,6 @@ function excluirContato($dadosContato)
 
         //import do arquivo de contato
         require_once(SRC . 'model/bd/contato.php');
-        require_once(SRC . 'modulo/config.php');
 
         // chama a função da model e valida se o retorno foi true ou false
         if (deleteContato($id)) {
@@ -161,7 +167,7 @@ function excluirContato($dadosContato)
             // permite apagar a foto fisicamente do diretorio no servidor
 
             if ($foto != null) {
-                if (unlink(DIRETORIO_FILE_UPLOAD . $foto))
+                if (unlink(SRC . DIRETORIO_FILE_UPLOAD . $foto))
                     return true;
                 else
                     return array(
