@@ -8,34 +8,37 @@
  * Versão: 1.7
  ***********************************************************************/
 
-$consumoAPI = false;
-
  if(strpos(getcwd(), 'api')) {
     require_once(SRC . '/modulo/config.php');
-    $consumoAPI = true;
- } else {
+    define('consumoAPI', true);
+} else {
     require_once('./modulo/config.php');
+    define('consumoAPI', false);
  }
 
 //Função para receber dados da Wiew e encaminhar para a Model (inserir)
-function inserirContato($dadosContato, $file)
+function inserirContato($dadosContato)
 {
 
     $nomeFoto = (string) null;
-
+    
     //Validação para verificar se o objeto está vazio
     if (!empty($dadosContato)) {
+
+        // recebe a imagem encaminhada dentro do array
+        $file = $dadosContato['file'];
+        
         //Validação de caixa vazia dos elementos nome, celular e email, pois são obrigatórios no banco de dados
-        if (!empty($dadosContato['txtNome']) && !empty($dadosContato['txtCelular']) && !empty($dadosContato['txtEmail']) && !empty($dadosContato['sltEstado'])) {/*O que fica no colchete é o 'name' da input*/
+        if (!empty($dadosContato[0]['nome']) && !empty($dadosContato[0]['celular']) && !empty($dadosContato[0]['email']) && !empty($dadosContato[0]['estado'])) {/*O que fica no colchete é o 'name' da input*/
 
             // validacao para identificar se chegou um arquivo para upload
-            if ($file['fleFoto']['name'] != null) {
+            if ($file['foto']['name'] != null) {
 
                 //import da funcao uploadfile
                 require_once(SRC . 'modulo/upload.php');
 
                 // chama a funcao de upload
-                $nomeFoto = uploadFile($file['fleFoto']);
+                $nomeFoto = uploadFile($file['foto']);
 
                 // se a variavel for do tipo array, ela ira conter o erro retornado por uploadFile
                 if (is_array($nomeFoto)) {
@@ -46,13 +49,13 @@ function inserirContato($dadosContato, $file)
             //Criação de um array de dados que será encaminhado a model para inserir no BD, é importante criar este array conforme as necessidades de manipulação do BD
             //OBS: criar as chaves do array conforme os nomes dos atributos do BD.
             $arrayDados = array(
-                "nome"     => $dadosContato['txtNome'],
-                "telefone" => $dadosContato['txtTelefone'],
-                "celular"  => $dadosContato['txtCelular'],
-                "email"    => $dadosContato['txtEmail'],
-                "obs"      => $dadosContato['txtObs'],
+                "nome"     => $dadosContato[0]['nome'],
+                "telefone" => $dadosContato[0]['telefone'],
+                "celular"  => $dadosContato[0]['celular'],
+                "email"    => $dadosContato[0]['email'],
+                "obs"      => $dadosContato[0]['obs'],
                 "foto"     => $nomeFoto,
-                "idestado" => $dadosContato['sltEstado']
+                "idestado" => $dadosContato[0]['estado']
             );
 
             //Import do arquivo contato para manipular o bd
@@ -81,7 +84,7 @@ function atualizarContato($dadosContato, $arrayDados)
     //Validação para verificar se o objeto está vazio
     if (!empty($dadosContato)) {
         //Validação de caixa vazia dos elementos nome, celular e email, pois são obrigatórios no banco de dados
-        if (!empty($dadosContato['txtNome']) && !empty($dadosContato['txtCelular']) && !empty($dadosContato['txtEmail']) && !empty($dadosContato['sltEstado'])) {/*O que fica no colchete é o 'name' da input*/
+        if (!empty($dadosContato['nome']) && !empty($dadosContato['celular']) && !empty($dadosContato['email']) && !empty($dadosContato['estado'])) {/*O que fica no colchete é o 'name' da input*/
             // validação para garantir que o id seja válido
             if (!empty($id) && is_numeric($id) && $id != 0) {
 
@@ -105,13 +108,13 @@ function atualizarContato($dadosContato, $arrayDados)
 
                 $arrayDados = array(
                     "id"       => $id,
-                    "nome"     => $dadosContato['txtNome'],
-                    "telefone" => $dadosContato['txtTelefone'],
-                    "celular"  => $dadosContato['txtCelular'],
-                    "email"    => $dadosContato['txtEmail'],
+                    "nome"     => $dadosContato['nome'],
+                    "telefone" => $dadosContato['telefone'],
+                    "celular"  => $dadosContato['celular'],
+                    "email"    => $dadosContato['email'],
                     "foto"     => $novaFoto,
-                    "idestado" => $dadosContato['sltEstado'],
-                    "obs"      => $dadosContato['txtObs']
+                    "idestado" => $dadosContato['estado'],
+                    "obs"      => $dadosContato['obs']
                 );
 
                 //Import do arquivo contato para manipular o bd
@@ -187,6 +190,12 @@ function excluirContato($dadosContato)
 //Função para solicitar os dados da model e encaminhar a lista de contatos para a View
 function listarContato()
 {
+    if (consumoAPI == true) {
+        echo('dentro da api');
+    } else {
+        echo('fora da api');
+    }
+    
     // import do arquivo que vai buscar os dados
     require_once(SRC .'model/bd/contato.php');
 

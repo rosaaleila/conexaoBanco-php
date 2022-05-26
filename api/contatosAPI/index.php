@@ -33,7 +33,7 @@
             // retorna um status code caso a solicitacao dê errado
             return $response   ->withStatus(404)
                                ->withHeader('Content-Type', 'application/json')
-                               ->write('{"id-erro": "404", "message": "Não foi possivel encontrar registros."}');
+                               ->write('{"idErro": "404", "message": "Não foi possivel encontrar registros."}');
         }
     });
 
@@ -75,6 +75,86 @@
 
     // endpoint: requisicao para inserir um novo contato
     $app->post('/contatos', function($request, $response, $args) {
+
+        // recebe o content type
+        $headerLine = $request->getHeaderLine('Content-Type');
+        
+        // cria um array com o content type dividido
+        $contentType = explode(';', $headerLine);
+
+        switch ($contentType[0]) {
+            case 'multipart/form-data':
+
+                // recebe os dados comuns do body da requisicoa
+                $dadosBody = $request->getParsedBody();
+                
+                // recebe a imagem enviada pela requisicao
+                $uploadFiles = $request->getUploadedFiles();
+
+                // cria um array com todos os dados que chegaram na requisicao (os dados chegam protegidos e acabamos tendo que utilizar metodos para recuperacao)
+                $arrayFoto = array(
+                    "name" => $uploadFiles['foto']->getClientFileName(),
+                    "type" => $uploadFiles['foto']->getClientMediaType(),
+                    "size" => $uploadFiles['foto']->getSize(),
+                    "tmp_name" => $uploadFiles['foto']->file
+                );
+
+                // criando uma chave foto para armazenar o objeto
+                $file = array('foto' => $arrayFoto);
+
+                // cria o array para enviar para a controller
+                $arrayDados = array(
+                    $dadosBody,
+                    "file" => $file
+                );
+
+                
+                // import do arquivo de configuracao
+                require_once('../modulo/config.php');
+                // import da controller de contatos, que fara a busca de dados
+                require_once('../controller/controllerContatos.php');
+
+                $resposta = inserirContato($arrayDados);
+
+                if (is_bool($resposta) && $resposta == true) {
+                    return $response    ->withStatus(201)
+                                        ->withHeader('Content-Type', 'application/json')
+                                        ->write('{"message": "Registro inserido com sucesso."}');
+                } elseif(is_array($resposta) && isset($resposta['idErro'])) {
+                    $dadosJSON = createJSON($resposta);
+
+                    return $response    ->withStatus(404)
+                                        ->withHeader('Content-Type', 'application/json')
+                                        ->write('{"message": "Dados inválidos", "erro": '.$dadosJSON.'}');
+                }
+
+                var_dump($dados);
+
+                return $response    ->withStatus(200)
+                                    ->withHeader('Content-Type', 'application/json')
+                                    ->write('{"message": "O formato escolhido foi Form-data."}');
+                break;
+
+            case 'application/json':
+                
+                $dadosBody = $request->getParsedBody();
+                var_dump($dadosBody);
+                die;
+
+                return $response    ->withStatus(200)
+                                    ->withHeader('Content-Type', 'application/json')
+                                    ->write('{"message": "O formato escolhido foi Jason."}');
+                break;
+
+            default:
+                return $response    ->withStatus(400)
+                                    ->withHeader('Content-Type', 'application/json')
+                                    ->write('{"message": "O formato escolhido é inválido.", "formatos aceitos": "JSON e FORM-DATA."}');
+                break;
+            
+        }
+
+
 
     });
 

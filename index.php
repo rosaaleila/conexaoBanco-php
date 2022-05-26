@@ -54,7 +54,6 @@ if (session_status())
         unset($_SESSION['$dadosContato']);
     }
 
-
 ?>
 
 <!DOCTYPE>
@@ -85,7 +84,7 @@ if (session_status())
                         <label> Nome: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <input type="text" name="txtNome" value="<?= isset($nome) ? $nome : null ?>" placeholder="Digite seu Nome" maxlength="100">
+                        <input type="text" name="nome" value="<?= isset($nome) ? $nome : null ?>" placeholder="Digite seu Nome" maxlength="100">
                     </div>
                 </div>
 
@@ -94,7 +93,7 @@ if (session_status())
                         <label> Estado: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <select name="sltEstado">
+                        <select name="estado">
                             <option value="">Selecione um item</option>
                             <?php
 
@@ -121,7 +120,7 @@ if (session_status())
                         <label> Telefone: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <input type="tel" name="txtTelefone" value="<?= isset($telefone) ? $telefone : null ?>">
+                        <input type="tel" name="telefone" value="<?= isset($telefone) ? $telefone : null ?>">
                     </div>
                 </div>
                 <div class="campos">
@@ -129,7 +128,7 @@ if (session_status())
                         <label> Celular: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <input type="tel" name="txtCelular" value="<?= isset($celular) ? $celular : null ?>">
+                        <input type="tel" name="celular" value="<?= isset($celular) ? $celular : null ?>">
                     </div>
                 </div>
 
@@ -139,7 +138,7 @@ if (session_status())
                         <label> Email: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <input type="email" name="txtEmail" value="<?= isset($email) ? $email : null ?>">
+                        <input type="email" name="email" value="<?= isset($email) ? $email : null ?>">
                     </div>
                 </div>
                 <div class="campos">
@@ -147,7 +146,7 @@ if (session_status())
                         <label> Escolha um arquivo: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <input type="file" name="fleFoto" accept=".jpg, .png, .jpeg, .gif">
+                        <input type="file" name="foto" accept=".jpg, .png, .jpeg, .gif">
                         <!-- seleção de arquivo -->
                     </div>
                 </div>
@@ -156,7 +155,7 @@ if (session_status())
                         <label> Observações: </label>
                     </div>
                     <div class="cadastroEntradaDeDados">
-                        <textarea name="txtObs" cols="50" rows="7"><?= isset($obs) ? $obs : null ?></textarea>
+                        <textarea name="obs" cols="50" rows="7"><?= isset($obs) ? $obs : null ?></textarea>
                     </div>
                 </div>
 
