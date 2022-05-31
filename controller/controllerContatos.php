@@ -8,13 +8,11 @@
  * Versão: 1.7
  ***********************************************************************/
 
- if(strpos(getcwd(), 'api')) {
+if(strpos(getcwd(), 'api')) {
     require_once(SRC . '/modulo/config.php');
-    define('consumoAPI', true);
 } else {
     require_once('./modulo/config.php');
-    define('consumoAPI', false);
- }
+}
 
 //Função para receber dados da Wiew e encaminhar para a Model (inserir)
 function inserirContato($dadosContato)
@@ -72,30 +70,30 @@ function inserirContato($dadosContato)
 }
 
 //Função para receber dados da Wiew e encaminhar para a Model (atualizar)
-function atualizarContato($dadosContato, $arrayDados)
+function atualizarContato($dadosContato)
 {
 
     // recebe os itens dentro do objeto arraydados
-    $id = $arrayDados['id'];
-    $foto = $arrayDados['foto'];
-    $file = $arrayDados['file'];
+    $id = $dadosContato['id'];
+    $foto = $dadosContato['foto'];
+    $file = $dadosContato['file'];
     $statusUpload = (bool) false;
 
     //Validação para verificar se o objeto está vazio
     if (!empty($dadosContato)) {
         //Validação de caixa vazia dos elementos nome, celular e email, pois são obrigatórios no banco de dados
-        if (!empty($dadosContato['nome']) && !empty($dadosContato['celular']) && !empty($dadosContato['email']) && !empty($dadosContato['estado'])) {/*O que fica no colchete é o 'name' da input*/
+        if (!empty($dadosContato[0]['nome']) && !empty($dadosContato[0]['celular']) && !empty($dadosContato[0]['email']) && !empty($dadosContato[0]['estado'])) {/*O que fica no colchete é o 'name' da input*/
             // validação para garantir que o id seja válido
             if (!empty($id) && is_numeric($id) && $id != 0) {
 
                 // validacao para identificar se sera enviado ao servidor uma nova foto 
-                if ($file['fleFoto']['name'] != null) {
+                if ($file['foto']['name'] != null) {
 
                     // import da funcao de upload
-                    require_once('modulo/upload.php');
+                    require_once(SRC . 'modulo/upload.php');
 
                     // chama a funcao de upload para enviar a nova foto ao servidor
-                    $novaFoto = uploadFile($file['fleFoto']);
+                    $novaFoto = uploadFile($file['foto']);
                     $statusUpload = true;
                 } else {
 
@@ -108,24 +106,24 @@ function atualizarContato($dadosContato, $arrayDados)
 
                 $arrayDados = array(
                     "id"       => $id,
-                    "nome"     => $dadosContato['nome'],
-                    "telefone" => $dadosContato['telefone'],
-                    "celular"  => $dadosContato['celular'],
-                    "email"    => $dadosContato['email'],
+                    "nome"     => $dadosContato[0]['nome'],
+                    "telefone" => $dadosContato[0]['telefone'],
+                    "celular"  => $dadosContato[0]['celular'],
+                    "email"    => $dadosContato[0]['email'],
                     "foto"     => $novaFoto,
-                    "idestado" => $dadosContato['estado'],
-                    "obs"      => $dadosContato['obs']
+                    "idestado" => $dadosContato[0]['estado'],
+                    "obs"      => $dadosContato[0]['obs']
                 );
 
                 //Import do arquivo contato para manipular o bd
-                require_once('model/bd/contato.php');
+                require_once(SRC . 'model/bd/contato.php');
 
                 //Chamando a função updateContato (essa função está na model)
                 if (updateContato($arrayDados)) {
                     // validando se devemos apagar a foto
                     // essa variavel foi ativada em true na verificao do conteudo file
                     if ($statusUpload) {
-                        unlink(DIRETORIO_FILE_UPLOAD . $foto);
+                        unlink(SRC . DIRETORIO_FILE_UPLOAD . $foto);
                     }
                     return true;
                 } else
@@ -190,11 +188,6 @@ function excluirContato($dadosContato)
 //Função para solicitar os dados da model e encaminhar a lista de contatos para a View
 function listarContato()
 {
-    if (consumoAPI == true) {
-        echo('dentro da api');
-    } else {
-        echo('fora da api');
-    }
     
     // import do arquivo que vai buscar os dados
     require_once(SRC .'model/bd/contato.php');

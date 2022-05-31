@@ -112,11 +112,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'GET')
                 $arrayDados = array(
                     "id"    => $idContato,
                     "foto"  => $foto,
-                    "file"  => $_FILES
+                    "file"  => $_FILES,
+                    $_POST
                 ); 
 
                 // Chama a função de editar na controller
-                $resposta = atualizarContato($_POST, $arrayDados);
+                $resposta = atualizarContato($arrayDados);
 
                 if (is_bool($resposta)) {
                     // verifica se o retorno é true
